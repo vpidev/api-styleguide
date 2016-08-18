@@ -52,6 +52,7 @@ As of 8/18/16 this style guide is provisional
 
 - Organize files around entity, not type.
 
+```
 	do:
 		\api
 			\customer
@@ -77,6 +78,7 @@ As of 8/18/16 this style guide is provisional
 			\Entities
 				CustomerTable.cs
 				CustomerResultXXX.cs
+```
 
 *Why?*: Keep related entities together
 
@@ -90,12 +92,14 @@ issue: It might be good to separate controllers, because of calls like this: /ap
 
 - Add a sub folder for each entity
 
+```
 	do:
 		\api
 			\customer
 			\activity
 			\account
 			\Quote
+```
 
 
 ###### [Style [A000](#style-a000)]
@@ -161,9 +165,12 @@ issue: It might be good to separate controllers, because of calls like this: /ap
 
 - Entities in api routes should be pluralized
 
+```
 do:   /api/customers/
 
 don't: /api/customer
+
+```
 
 *Why?*: distinguish api routes from front-end routes
 
@@ -172,11 +179,13 @@ don't: /api/customer
 
 - API routes should read as retrieving resources vs performing actions
 
+```
 	do:
 		/api/customers/2000
 		
 	don't:
 		/api/getCustomerbyid/2000
+```
 
 *Why?*: Restful principles
 
@@ -189,12 +198,14 @@ don't: /api/customer
 
 - Define sub routes for getting related entities 
 
+```
 do:  
 		/api/customers/2000/orders
 		
 	don't:
 		/api/customerorders/2000
 		/api/orders/custid=2000
+```
 
 *Why?*: data access should revolve around well-defined entities, rather than a collection of dozens of method calls
 
@@ -216,10 +227,12 @@ do:
 
 - include primary key's as part of the path
 
+```
 	do:
 		/api/customers/2000
 	don't:
 		/api/customers/id=2000
+```
 
 *Why?*: RESTful principles
 
@@ -228,6 +241,7 @@ do:
 
 - include optional settings, search filters using query strings
 
+```
     do:
 		/api/customers?status=new
 		/api/products/name="paint"&category="automotive"
@@ -236,6 +250,8 @@ do:
 	don't
 		/api/customers/new
 		/api/products/paint/automotive
+
+```
 
 *Why?*: confusing when many choices are present, across multiple fields
 
