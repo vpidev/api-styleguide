@@ -101,6 +101,24 @@ issue: It might be good to separate controllers, because of calls like this: /ap
 			\Quote
 ```
 
+###### [Style [A000](#style-a000)]
+
+- Namespaces should be in the form of `<project>.Business` or `<project>.API` name, and should not include entity subfolders
+
+```
+Do
+
+namespace MyProject.Business {}
+
+don't
+
+namespace MyProject.Business.Customer {}
+```
+
+*Why?*: By default, adding a class underneath a project folder appends the folder name to the namespace.  This leads to conflicts when referencing the entity class inside the folder.  
+        for example, if the class is Customer.cs, inside \business\customer, having the namespace as `myProject.Business.Customer` will cause the following error: `Customer is a namespace but used as a type`
+		whenever we reference `Customer`.  We would need to access as `Customer.Customer`, which it not a convenient or intuitive way of referencing the class... 
+
 
 ###### [Style [A000](#style-a000)]
 
@@ -367,3 +385,59 @@ a XXXResultYYYY class...
 - do not include data access logic in Table Class
 
 *Why?*: class should only define shape of result set
+
+
+###### [Style [A000](#style-a000)]
+
+- DAL should find connection string from configuration file - do not pass in from business layer
+
+*Why?*: Connection is an implementation detail that the business layer doesn't need to know about
+
+*Why?*: Typed Data Sets, (XSD's) functioned as a Data Access layer, and were responsible for finding out the current connection string
+
+###### [Style [A000](#style-a000)]
+
+- Use property references for shared classes / services
+
+
+```
+
+do
+
+private CustomerDAL _customerDAL;
+
+protected CustomerDAL CustomerDAL
+{
+	get
+	{
+		if (_customerDAL == null)
+		{
+			_customerDAL = new CustomerDAL();
+		}
+
+		return _customerDAL;
+	}
+}
+
+protected IEnumerable<Customer> GetAll()
+{
+	return CustomerDAL.Get();
+}
+
+
+Don't
+
+
+protected IEnumerable<Customer> GetAll()
+{
+	CustomerDAL customerDAL = new CustomerDAL():
+	return customerDAL.Get();
+}
+
+```
+
+*Why?*: Consistency - there are a number of ways this can be done.  Each client should use the class / service in the same manner
+*Why?*: Simplify methods that need to use the service.  This is how Angular implements service access - the client code has no knowledge of how to instantiate the service, it just 'exists'
+*Why?*: Creates the service at the last possible moment.    
+
+
